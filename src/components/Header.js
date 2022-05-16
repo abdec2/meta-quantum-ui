@@ -3,16 +3,23 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { GlobalContext } from "./../context/GlobalContext";
 import StakeABI from './../abi/staking.json'
-
+import tokenABI from './../abi/token.json'
 import CONFIG from "./../abi/config";
 
 const Header = ({setError, setErrMsg}) => {
-  const { account, updateAccount, updateStakedBalance } = useContext(GlobalContext);
+  const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
 
+  const getTokenBalance = async (signer, address) => {
+    const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
+    const balanceOf = await tokenContract.balanceOf(address)
+    updateTokenBalance(ethers.utils.formatUnits(balanceOf, CONFIG.tokenDecimals))
+  }
+  
   const loadAccountData = async (signer, address) => {
     const contract = new ethers.Contract(CONFIG.contractAddress, StakeABI, signer)
     const stakeBalance = await contract.stakeOf(address)
     updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
+    getTokenBalance(signer, address)
   }
 
   const handleWalletConnect = async () => {
@@ -40,6 +47,7 @@ const Header = ({setError, setErrMsg}) => {
   const disconnectWallet = () => {
     updateAccount(null)
     updateStakedBalance(null)
+    updateTokenBalance(null)
   }
 
   useEffect(() => {
