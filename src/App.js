@@ -9,6 +9,7 @@ import { ethers } from 'ethers';
 import CONFIG from './abi/config';
 import stakeABI from './abi/staking.json'
 import { GlobalContext } from './context/GlobalContext'
+import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   const [error, setError] = useState(false);
@@ -35,6 +36,7 @@ function App() {
 
   return (
       <div className="App bg-grad min-h-screen text-white">
+        {/* <LoadingSpinner /> */}
         <Header setError={setError} setErrMsg={setErrMsg} />
         <Main setError={setError} setErrMsg={setErrMsg} />
         {error && (<AlertBox msg={errMsg} setError={setError} setErrMsg={setErrMsg} />)}

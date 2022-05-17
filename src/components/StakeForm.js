@@ -7,87 +7,154 @@ import tokenABI from './../abi/token.json'
 import contractABI from './../abi/staking.json'
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
+import LoadingSpinner from './LoadingSpinner'
 
 const schema = yup.object().shape({
     amount: yup.number().required()
 })
 
-const StakeForm = ({setError, setErrMsg}) => {
+const StakeForm = ({ setError, setErrMsg }) => {
     const [approve, setApprove] = useState(false)
     const [amount, setAmount] = useState('')
     const [balance, setBalance] = useState('')
+    const [isLoading, setLoading] = useState(false)
+    const [Withdraw, setWithdraw] = useState(false)
     const { account, blockChainData, updateStakedBalance, updateTotalStaked } = useContext(GlobalContext)
 
     const handleApprove = () => {
         schema.isValid({
             amount
         }).then(async value => {
-            if(value) {
-                if(account) {
-                    const web3modal = new Web3Modal();
-                    const instance = await web3modal.connect();
-                    const provider = new ethers.providers.Web3Provider(instance);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress(); 
-                    const tokenContract = new ethers.Contract(CONFIG.tokenAddress,tokenABI, signer)
-                    const estimateGas = await tokenContract.estimateGas.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'))
-                    console.log(estimateGas.toString())
-                    const tx = {
-                        gasLimit: estimateGas.toString()
+            if (value) {
+                if (account) {
+                    if (parseFloat(amount) <= parseFloat(blockChainData.TokenBalance)) {
+                        try {
+                            setLoading(true)
+                            const web3modal = new Web3Modal();
+                            const instance = await web3modal.connect();
+                            const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = provider.getSigner();
+                            const address = await signer.getAddress();
+                            const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
+                            const estimateGas = await tokenContract.estimateGas.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'))
+                            console.log(estimateGas.toString())
+                            const tx = {
+                                gasLimit: estimateGas.toString()
+                            }
+                            const approveTx = await tokenContract.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'), tx)
+                            await approveTx.wait()
+                            setApprove(true)
+                            console.log(approveTx)
+                            setLoading(false)
+                        } catch (e) {
+                            setLoading(false)
+                        }
+                    } else {
+                        setError(true)
+                        setErrMsg('Unsufficient Amount')
                     }
-                    const approveTx = await tokenContract.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'), tx)
-                    await approveTx.wait()
-                    setApprove(true)
-                    console.log(approveTx)
 
 
                 } else {
-                    setError(true) 
+                    setError(true)
                     setErrMsg('Please connect your wallet')
                 }
             }
         })
+        setLoading(false)
     }
 
     const handleStake = () => {
         schema.isValid({
             amount
         }).then(async value => {
-            if(value) {
-                if(account) {
-                    const web3modal = new Web3Modal();
-                    const instance = await web3modal.connect();
-                    const provider = new ethers.providers.Web3Provider(instance);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress(); 
-                    const contract = new ethers.Contract(CONFIG.contractAddress,contractABI, signer)
-                    const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), '5'))
-                    console.log(estimateGas.toString())
-                    const tx = {
-                        gasLimit: estimateGas.toString()
-                    }
-                    const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), '5'), tx)
-                    await stakeTx.wait()
-                    setApprove(false)
-                    console.log(stakeTx)
-                    updateStakedBalance(parseFloat(blockChainData.StakedBalance) + parseFloat(amount))
-                    updateTotalStaked(parseFloat(blockChainData.TotalStaked) + parseFloat(amount))
+            if (value) {
+                if (account) {
+                    if (parseFloat(amount) <= parseFloat(blockChainData.TokenBalance)) {
+                        try {
+                            setLoading(true)
+                            const web3modal = new Web3Modal();
+                            const instance = await web3modal.connect();
+                            const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = provider.getSigner();
+                            const address = await signer.getAddress();
+                            const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
+                            const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), '5'))
+                            console.log(estimateGas.toString())
+                            const tx = {
+                                gasLimit: estimateGas.toString()
+                            }
+                            const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), '5'), tx)
+                            await stakeTx.wait()
+                            setApprove(false)
+                            console.log(stakeTx)
+                            updateStakedBalance(parseFloat(blockChainData.StakedBalance) + parseFloat(amount))
+                            updateTotalStaked(parseFloat(blockChainData.TotalStaked) + parseFloat(amount))
+                            setLoading(false)
+                        } catch (e) {
+                            setLoading(false)
+                        }
 
+                    } else {
+                        setError(true)
+                        setErrMsg('Unsufficient Amount')
+                    }
 
                 } else {
-                    setError(true) 
+                    setError(true)
                     setErrMsg('Please connect your wallet')
                 }
             }
         })
+        setLoading(false)
     }
 
     const handleWithdraw = () => {
         schema.isValid({
             amount: balance
-        }).then(value => {
-            console.log(value)
+        }).then(async value => {
+            if (value) {
+                if (account) {
+                    if (parseFloat(balance) <= parseFloat(blockChainData.StakedBalance)) {
+                        try {
+                            setLoading(true)
+                            setWithdraw(true)
+                            const web3modal = new Web3Modal();
+                            const instance = await web3modal.connect();
+                            const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = provider.getSigner();
+                            const address = await signer.getAddress();
+                            const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
+                            const estimateGas = await contract.estimateGas.removeStake(ethers.utils.parseUnits(balance.toString(), '5'))
+                            console.log(estimateGas.toString())
+                            const tx = {
+                                gasLimit: estimateGas.toString()
+                            }
+                            const removeStakeTx = await contract.removeStake(ethers.utils.parseUnits(balance.toString(), '5'), tx)
+                            await removeStakeTx.wait()
+                            setApprove(false)
+                            console.log(removeStakeTx)
+                            updateStakedBalance(parseFloat(blockChainData.StakedBalance) - parseFloat(balance))
+                            updateTotalStaked(parseFloat(blockChainData.TotalStaked) - parseFloat(balance))
+                            setLoading(false)
+                            setWithdraw(false)
+                        } catch (e) {
+                            setLoading(false)
+                            setWithdraw(false)
+                        }
+                    } else {
+                        setError(true)
+                        setErrMsg('Unsufficient Amount')
+                    }
+
+                } else {
+                    setError(true)
+                    setErrMsg('Please connect your wallet')
+                }
+            }
         })
+        setLoading(false)
+        setWithdraw(false)
     }
 
     return (
@@ -99,18 +166,38 @@ const StakeForm = ({setError, setErrMsg}) => {
                         <input type="text" name="amount" className="w-full bg-transparent border-2 border-[color:var(--border-color)] text-md focus:outline-none px-2 py-1" value={amount} onChange={e => setAmount(e.target.value)} />
                         <span className='absolute top-0 right-0 mr-3 mt-1 cursor-pointer hover:text-yellow-500' onClick={() => setAmount(blockChainData.TokenBalance)}>Max</span>
                     </div>
-                    <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
-                    <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
+
+                    {(isLoading && !Withdraw) ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <>
+                            <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
+
+                            <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
+                        </>
+                    )}
+
+
                 </div>
             </div>
             <div className="mt-2">
+
                 <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left">Stake Balance: {(blockChainData.StakedBalance) ? blockChainData.StakedBalance : '0.0'} {CONFIG.tokenSymbol}</p>
+
                 <div className="w-full flex items-center justify-between">
                     <div className='w-3/4 relative'>
                         <input type="text" name="amount" className="w-full bg-transparent border-2 border-[color:var(--border-color)] text-md focus:outline-none px-2 py-1 " value={balance} onChange={e => setBalance(e.target.value)} />
                         <span className='absolute top-0 right-0 mr-3 mt-1 cursor-pointer hover:text-yellow-500' onClick={() => setBalance(blockChainData.StakedBalance)}>Max</span>
                     </div>
-                    <button className="bg-[#3e3f53] uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-yellow-500" onClick={handleWithdraw}>Withdraw</button>
+
+                    {(isLoading && Withdraw) ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <button className="bg-[#3e3f53] uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-yellow-500" onClick={handleWithdraw}>Withdraw</button>
+                    )}
+
+                    
+
                 </div>
             </div>
         </div>

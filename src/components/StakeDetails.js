@@ -25,7 +25,7 @@ const StakeDetails = () => {
     
     return (
         <>
-            <div className="p-6 flex items-center justify-center space-x-8">
+            <div className="p-6 flex items-center justify-center space-x-2 md:space-x-8">
                 <button className={classNames('uppercase truncate text-sm font-bold px-2 py-1 border-2 border-[color:var(--border-color)] hover:text-yellow-500', {'text-yellow-500': plan.plan === 1})} onClick={()=> setPlan(plans[0])}>6 Months</button>
                 <button className={classNames('uppercase truncate text-sm font-bold px-2 py-1 border-2 border-[color:var(--border-color)] hover:text-yellow-500', {'text-yellow-500': plan.plan === 2})} onClick={()=> setPlan(plans[1])}>1 Years</button>
                 <button className={classNames('uppercase truncate text-sm font-bold px-2 py-1 border-2 border-[color:var(--border-color)] hover:text-yellow-500', {'text-yellow-500': plan.plan === 3})} onClick={()=> setPlan(plans[2])}>3 Years</button>
