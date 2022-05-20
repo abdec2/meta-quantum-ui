@@ -38,7 +38,7 @@
 }
 
 .web3modal-modal-lightbox {
-    z-index: 20 !important;
+    z-index: 50 !important;
 }
 
  @media (min-width: 768px) {

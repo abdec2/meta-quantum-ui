@@ -1,6 +1,66 @@
 import classNames from "classnames"
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { GlobalContext } from "./../context/GlobalContext";
+import { useContext, useEffect } from "react";
+import { ethers } from "ethers";
+import CONFIG from "./../abi/config";
 
-const MobileMenu = ({ isOpen, setIsOpen, account, disconnectWallet, handleWalletConnect }) => {
+const providerOptions = {
+  network: 'rinkeby',
+  cacheProvider: false,
+  walletconnect: {
+    package: WalletConnectProvider, // required
+    options: {
+      infuraId: process.env.REACT_APP_INFURA_PROJECT_ID
+
+    }
+  }
+};
+
+
+const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData }) => {
+  const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
+
+
+  const handleWalletConnect = async () => {
+    const web3modal = new Web3Modal({
+      providerOptions
+    });
+    const instance = await web3modal.connect();
+    const provider = new ethers.providers.Web3Provider(instance);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    updateAccount(address);
+    const network = await provider.getNetwork();
+    console.log(network)
+    if(network.chainId !== CONFIG.chainId ) {
+        setError(true) 
+        setErrMsg(`Contract is not deployed on current network. please choose ${CONFIG.networkName}`)
+    } else {
+        setError(false) 
+        setErrMsg('')
+        loadAccountData(signer, address)
+    }
+  };
+
+  const disconnectWallet = () => {
+    updateAccount(null)
+    updateStakedBalance(null)
+    updateTokenBalance(null)
+  }
+
+  useEffect(() => {
+    if(window.ethereum) {
+      window.ethereum.on('accountsChanged', accounts => {
+          updateAccount(accounts[0])
+      })
+      window.ethereum.on('chainChanged', chainId => {
+          window.location.reload();
+      })
+  }
+  }, [account]);
+
 
   return (
     <div className={classNames('fixed z-40 top-0 left-0 h-screen bg-grad container md:hidden', 

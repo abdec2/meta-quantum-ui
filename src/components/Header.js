@@ -9,17 +9,15 @@ import MobileMenu from "./MobileMenu";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const providerOptions = {
+  network: 'rinkeby',
+  cacheProvider: false,
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      rpc: {
-        4: process.env.REACT_APP_ALCHEMY_URI
-      }
+      infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
     }
   }
 };
-
-
 
 const Header = ({setError, setErrMsg}) => {
   const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
@@ -39,10 +37,7 @@ const Header = ({setError, setErrMsg}) => {
   }
 
   const handleWalletConnect = async () => {
-    if (!window.ethereum) {
-      alert('Please install MetaMask');
-      return
-    }
+
     const web3modal = new Web3Modal({
       providerOptions
     });
@@ -52,6 +47,7 @@ const Header = ({setError, setErrMsg}) => {
     const address = await signer.getAddress();
     updateAccount(address);
     const network = await provider.getNetwork();
+    console.log(network)
     if(network.chainId !== CONFIG.chainId ) {
         setError(true) 
         setErrMsg(`Contract is not deployed on current network. please choose ${CONFIG.networkName}`)
@@ -81,7 +77,7 @@ const Header = ({setError, setErrMsg}) => {
 
   return (
     <div className="container mx-auto md:max-w-5xl px-12 font-Poppins">
-      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} account={account} disconnectWallet={disconnectWallet} handleWalletConnect={handleWalletConnect} />
+      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} account={account} setError={setError} setErrMsg={setErrMsg} loadAccountData={loadAccountData} />
       <div className="header flex items-center justify-between space-x-20 min-h-[8rem]">
         <div className="w-20 truncate">
           <img
