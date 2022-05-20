@@ -6,6 +6,20 @@ import StakeABI from './../abi/staking.json'
 import tokenABI from './../abi/token.json'
 import CONFIG from "./../abi/config";
 import MobileMenu from "./MobileMenu";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
+const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider, // required
+    options: {
+      rpc: {
+        4: process.env.REACT_APP_ALCHEMY_URI
+      }
+    }
+  }
+};
+
+
 
 const Header = ({setError, setErrMsg}) => {
   const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
@@ -29,7 +43,9 @@ const Header = ({setError, setErrMsg}) => {
       alert('Please install MetaMask');
       return
     }
-    const web3modal = new Web3Modal();
+    const web3modal = new Web3Modal({
+      providerOptions
+    });
     const instance = await web3modal.connect();
     const provider = new ethers.providers.Web3Provider(instance);
     const signer = provider.getSigner();
@@ -38,7 +54,7 @@ const Header = ({setError, setErrMsg}) => {
     const network = await provider.getNetwork();
     if(network.chainId !== CONFIG.chainId ) {
         setError(true) 
-        setErrMsg('Contract is not deployed on current network. please choose Binance Smartchain Mainnet')
+        setErrMsg(`Contract is not deployed on current network. please choose ${CONFIG.networkName}`)
     } else {
         setError(false) 
         setErrMsg('')
@@ -73,7 +89,7 @@ const Header = ({setError, setErrMsg}) => {
             alt="meta quantum"
           />
         </div>
-        <ul className="hidden md:flex items-center justify-between w-full">
+        <ul className="hidden md:flex items-center justify-between w-full z-10">
           <li className="p-2 truncate">
             <a href="/">Website</a>
           </li>

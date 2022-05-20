@@ -10,7 +10,7 @@ const Main = ({setError, setErrMsg}) => {
     return (
         <div className="container mx-auto md:max-w-5xl px-12 text-[color:var(--font-color)] mt-14 font-Poppins">
             <div className="main flex items-center justify-between flex-wrap md:flex-nowrap">
-                <div className="w-full md:w-1/2 md:pr-8 mb-8 z-20">
+                <div className="w-full md:w-1/2 md:pr-8 mb-8 z-10">
                     <div className="stakePanel bg-[color:var(--cards-bg)] p-6 w-full">
                         <h3 className="uppercase font-semibold text-md font-Poppins text-left">Participate Meta-Quantum Stake</h3>
                         <h2 className="font-extrabold text-2xl ml-3 text-left">{(blockChainData.StakedBalance) ? blockChainData.StakedBalance : '0.00'} {CONFIG.tokenSymbol}</h2>

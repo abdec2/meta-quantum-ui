@@ -22,6 +22,7 @@
 }
 
 .btn-grad1::after {
+    z-index: 1;
     width: 500px;
     height: 500px;
     position: absolute;
@@ -35,6 +36,11 @@
     background: radial-gradient(circle, rgba(78, 19, 101, 1) 0%, rgba(42, 23, 105, 0) 76%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#4e1365", endColorstr="#2a1769", GradientType=1);
 }
+
+.web3modal-modal-lightbox {
+    z-index: 20 !important;
+}
+
  @media (min-width: 768px) {
     .btn-grad1::after {
         transform: translate(calc(100vw - 100% - 300px), 0) scale(1);
