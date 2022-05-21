@@ -15,7 +15,17 @@ export const AppReducer = (state, action) => {
                 blockChainData: {
                     ...state.blockChainData, 
                     StakedBalance: action.payload
-                }            }
+                }            
+            }
+
+        case 'UPDATE_REWARDS_BALANCE':
+            return {
+                ...state,
+                blockChainData: {
+                    ...state.blockChainData, 
+                    RewardBalance: action.payload
+                }            
+            }
         
         case 'UPDATE_TOKEN_PRICE':
             return {

@@ -20,7 +20,7 @@ const providerOptions = {
 };
 
 const Header = ({setError, setErrMsg}) => {
-  const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
+  const { account, updateAccount, updateStakedBalance, updateRewardBalance, updateTokenBalance } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false)
 
   const getTokenBalance = async (signer, address) => {
@@ -32,7 +32,9 @@ const Header = ({setError, setErrMsg}) => {
   const loadAccountData = async (signer, address) => {
     const contract = new ethers.Contract(CONFIG.contractAddress, StakeABI, signer)
     const stakeBalance = await contract.stakeOf(address)
+    const rewardBalance = await contract.rewardOf(address)
     updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
+    updateRewardBalance(ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals))
     getTokenBalance(signer, address)
   }
 
@@ -87,13 +89,13 @@ const Header = ({setError, setErrMsg}) => {
         </div>
         <ul className="hidden md:flex items-center justify-between w-full z-10">
           <li className="p-2 truncate">
-            <a href="/">Website</a>
+            <a href="https://www.meta-quantum.io/">Website</a>
           </li>
           <li className="p-2 truncate">
-            <a href="/">Audit</a>
+            <a href="https://cdn.meta-quantum.io/website/documents/QuantumHeart.pdf">Audit</a>
           </li>
           <li className="p-2 truncate">
-            <a href="/">Whitepaper</a>
+            <a href="https://cdn.meta-quantum.io/website/documents/whitepaper-romana.pdf">Whitepaper</a>
           </li>
           <li className="px-4 py-2 border-[4px] border-white font-bold truncate">
             <a href="/">BUY $QTH</a>

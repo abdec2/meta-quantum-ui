@@ -6,17 +6,17 @@ const plans = [
     {
         plan: 1,
         duration: '6 Months', 
-        apy: '40%'
+        apy: '30%'
     },
     {
         plan: 2,
         duration: '1 Years', 
-        apy: '80%'
+        apy: '60%'
     },
     {
         plan: 3,
         duration: '3 Years', 
-        apy: '180%'
+        apy: '150%'
     }
 ]
 

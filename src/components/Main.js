@@ -1,14 +1,66 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import CONFIG from "../abi/config"
 import { GlobalContext } from "../context/GlobalContext"
 import StakeDetails from "./StakeDetails"
 import StakeForm from "./StakeForm"
+import LoadingSpinner from './LoadingSpinner'
+import contractABI from './../abi/staking.json'
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
 
-const Main = ({setError, setErrMsg}) => {
-    const { blockChainData } = useContext(GlobalContext)
+const Main = ({ setError, setErrMsg }) => {
+    const { blockChainData, account, updateRewardBalance } = useContext(GlobalContext)
+    const [isLoading, setLoading] = useState(false)
+
+    const handleRewardsWithdraw = async () => {
+        if (account) {
+            if (parseFloat(blockChainData.RewardBalance) > 0) {
+                try {
+                    setLoading(true)
+                    const web3modal = new Web3Modal();
+                    const instance = await web3modal.connect();
+                    const provider = new ethers.providers.Web3Provider(instance);
+                    const signer = provider.getSigner();
+                    const address = await signer.getAddress();
+                    const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
+                    const estimateGas = await contract.estimateGas.withdrawReward()
+                    console.log(estimateGas.toString())
+                    const tx = {
+                        gasLimit: estimateGas.toString()
+                    }
+                    const withdrawRewardTx = await contract.withdrawReward()
+                    await withdrawRewardTx.wait()
+                    console.log(withdrawRewardTx)
+                    updateRewardBalance(null);
+                    setLoading(false)
+                } catch (e) {
+                    setLoading(false)
+                    setError(true)
+                    setErrMsg('Something went wrong')
+                }
+            } else {
+                setError(true)
+                setErrMsg('Your Rewards balance is 0')
+            }
+        }
+    }
 
     return (
         <div className="container mx-auto md:max-w-5xl px-12 text-[color:var(--font-color)] mt-14 font-Poppins">
+            {account && (
+                <div className="stakePanel bg-[color:var(--cards-bg)] p-6 w-full mb-3">
+                    <h3 className="uppercase font-semibold text-md font-Poppins text-left">Meta Quantum Rewards Earned</h3>
+                    <div className="flex items-center justify-between">
+                        <h2 className="font-extrabold text-2xl ml-3 text-left">{(blockChainData.RewardBalance) ? blockChainData.RewardBalance : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        {(isLoading) ? (
+                            <LoadingSpinner />
+                        ) : (
+                            <button className="bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white" onClick={handleRewardsWithdraw}>Withdraw</button>
+                        )}
+
+                    </div>
+                </div>
+            )}
             <div className="main flex items-center justify-between flex-wrap md:flex-nowrap">
                 <div className="w-full md:w-1/2 md:pr-8 mb-8 z-10">
                     <div className="stakePanel bg-[color:var(--cards-bg)] p-6 w-full">

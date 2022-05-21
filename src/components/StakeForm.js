@@ -195,10 +195,8 @@ const StakeForm = ({ setError, setErrMsg }) => {
                     ) : (
                         <button className="bg-[#3e3f53] uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-yellow-500" onClick={handleWithdraw}>Withdraw</button>
                     )}
-
-                    
-
                 </div>
+
             </div>
         </div>
     )

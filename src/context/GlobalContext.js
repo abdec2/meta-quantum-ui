@@ -6,6 +6,7 @@ const initialState = {
     blockChainData: {
         TokenBalance: null,
         StakedBalance: null,
+        RewardBalance: null,
         TokenPrice:null,
         TotalRewards:null,
         TotalStaked:null
@@ -28,6 +29,13 @@ export const GlobalProvider = ({ children }) => {
         dispatch({
             type: 'UPDATE_STAKED_BALANCE',
             payload: balance
+        })
+    }
+
+    const updateRewardBalance = (rewards) => {
+        dispatch({
+            type: 'UPDATE_REWARDS_BALANCE',
+            payload: rewards
         })
     }
 
@@ -66,6 +74,7 @@ export const GlobalProvider = ({ children }) => {
                 updateAccount,
                 updateTokenBalance,
                 updateStakedBalance,
+                updateRewardBalance,
                 updateTokenPrice,
                 updateTotalRewards,
                 updateTotalStaked

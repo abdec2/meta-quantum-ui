@@ -18,7 +18,7 @@ function App() {
   const {updateTotalRewards, updateTotalStaked} = useContext(GlobalContext)
 
   const loadBlockChain = async () => {
-    const provider = ethers.getDefaultProvider('rinkeby', {
+    const provider = ethers.getDefaultProvider('mainnet', {
       infura: process.env.REACT_APP_INFURA_PROJECT_ID
     });
     const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, provider)
