@@ -55,7 +55,7 @@ const Main = ({ setError, setErrMsg }) => {
                         {(isLoading) ? (
                             <LoadingSpinner />
                         ) : (
-                            <button className="bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white" onClick={handleRewardsWithdraw}>Withdraw</button>
+                            <button className="bg-purple-900 text-white uppercase px-6 py-2 ml-4 text-sm hover:text-purple-300 border border-white rounded-full" onClick={handleRewardsWithdraw}>Withdraw</button>
                         )}
 
                     </div>

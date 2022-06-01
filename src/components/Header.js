@@ -91,23 +91,23 @@ const Header = ({setError, setErrMsg}) => {
           <li className="p-2 truncate">
             <a href="https://www.meta-quantum.io/">Website</a>
           </li>
-          <li className="p-2 truncate">
+          {/* <li className="p-2 truncate">
             <a href="https://cdn.meta-quantum.io/website/documents/QuantumHeart.pdf">Audit</a>
           </li>
           <li className="p-2 truncate">
             <a href="https://cdn.meta-quantum.io/website/documents/whitepaper-romana.pdf">Whitepaper</a>
-          </li>
-          <li className="px-4 py-2 border-[4px] border-white font-bold truncate">
+          </li> */}
+          <li className="px-6 py-2 border rounded-full border-white truncate bg-purple-900 ">
             <a href="/">BUY $QTH</a>
           </li>
-          <li className="p-2 ml-4 bg-white text-black truncate">
+          <li className="py-2 px-6 ml-4 bg-purple-900 text-white truncate rounded-full border border-white">
             {account ? (
               <button
               className="uppercase font-bold flex items-center justify-center space-x-2"
               onClick={() => disconnectWallet()}
             >
               <svg
-                className="w-8"
+                className="w-8 fill-white"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
               >
@@ -123,7 +123,7 @@ const Header = ({setError, setErrMsg}) => {
               onClick={() => handleWalletConnect()}
             >
               <svg
-                className="w-8"
+                className="w-8 fill-white"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
               >

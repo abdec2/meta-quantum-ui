@@ -9,7 +9,10 @@ const initialState = {
         RewardBalance: null,
         TokenPrice:null,
         TotalRewards:null,
-        TotalStaked:null
+        TotalStaked:null, 
+        sixMonthApy: null,
+        oneYearApy: null, 
+        threeYearApy: null
     }
 }
 
@@ -66,6 +69,27 @@ export const GlobalProvider = ({ children }) => {
         })
     }
 
+    const updateSixMonthApy = (apy) => {
+        dispatch({
+            type: 'UPDATE_SIX_MONTH_APY',
+            payload: apy
+        })
+    }
+
+    const updateOneYearApy = (apy) => {
+        dispatch({
+            type: 'UPDATE_ONE_YEAR_APY',
+            payload: apy
+        })
+    }
+
+    const updateThreeYearApy = (apy) => {
+        dispatch({
+            type: 'UPDATE_THREE_YEAR_APY',
+            payload: apy
+        })
+    }
+
 
     return (
         <GlobalContext.Provider value={
@@ -77,7 +101,10 @@ export const GlobalProvider = ({ children }) => {
                 updateRewardBalance,
                 updateTokenPrice,
                 updateTotalRewards,
-                updateTotalStaked
+                updateTotalStaked,
+                updateSixMonthApy,
+                updateOneYearApy,
+                updateThreeYearApy
             }
         }
         >

@@ -36,12 +36,12 @@ const StakeForm = ({ setError, setErrMsg }) => {
                             const signer = provider.getSigner();
                             const address = await signer.getAddress();
                             const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
-                            const estimateGas = await tokenContract.estimateGas.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'))
+                            const estimateGas = await tokenContract.estimateGas.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals))
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const approveTx = await tokenContract.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), '5'), tx)
+                            const approveTx = await tokenContract.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals), tx)
                             await approveTx.wait()
                             setApprove(true)
                             console.log(approveTx)
@@ -79,12 +79,12 @@ const StakeForm = ({ setError, setErrMsg }) => {
                             const signer = provider.getSigner();
                             const address = await signer.getAddress();
                             const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                            const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), '5'))
+                            const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals))
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), '5'), tx)
+                            const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals), tx)
                             await stakeTx.wait()
                             setApprove(false)
                             console.log(stakeTx)
@@ -125,12 +125,12 @@ const StakeForm = ({ setError, setErrMsg }) => {
                             const signer = provider.getSigner();
                             const address = await signer.getAddress();
                             const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                            const estimateGas = await contract.estimateGas.removeStake(ethers.utils.parseUnits(balance.toString(), '5'))
+                            const estimateGas = await contract.estimateGas.removeStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals))
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const removeStakeTx = await contract.removeStake(ethers.utils.parseUnits(balance.toString(), '5'), tx)
+                            const removeStakeTx = await contract.removeStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), tx)
                             await removeStakeTx.wait()
                             setApprove(false)
                             console.log(removeStakeTx)
@@ -171,9 +171,9 @@ const StakeForm = ({ setError, setErrMsg }) => {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
+                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
 
-                            <button className={classNames('bg-yellow-500 text-black uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-white', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
+                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
                         </>
                     )}
 
@@ -193,7 +193,7 @@ const StakeForm = ({ setError, setErrMsg }) => {
                     {(isLoading && Withdraw) ? (
                         <LoadingSpinner />
                     ) : (
-                        <button className="bg-[#3e3f53] uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-yellow-500" onClick={handleWithdraw}>Withdraw</button>
+                        <button className="bg-purple-900 uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-purple-400 rounded-full border border-white" onClick={handleWithdraw}>Withdraw</button>
                     )}
                 </div>
 

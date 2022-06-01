@@ -15,7 +15,7 @@ function App() {
   const [error, setError] = useState(false);
   const [errMsg, setErrMsg] = useState('');
 
-  const {updateTotalRewards, updateTotalStaked} = useContext(GlobalContext)
+  const {updateTotalRewards, updateTotalStaked, updateSixMonthApy, updateOneYearApy, updateThreeYearApy} = useContext(GlobalContext)
 
   const loadBlockChain = async () => {
     const provider = ethers.getDefaultProvider('mainnet', {
@@ -24,8 +24,14 @@ function App() {
     const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, provider)
     const totalStake = await contract.totalStake()
     const totalReward = await contract.totalRewards()
+    const six_month_apy = await contract.getSixMonthAPR()
+    const one_year_apy = await contract.getOneYearAPR()
+    const three_year_apy = await contract.getThreeYearAPR()
     updateTotalRewards(ethers.utils.formatUnits(totalReward, CONFIG.tokenDecimals))
     updateTotalStaked(ethers.utils.formatUnits(totalStake, CONFIG.tokenDecimals))
+    updateSixMonthApy(six_month_apy)
+    updateOneYearApy(one_year_apy)
+    updateThreeYearApy(three_year_apy)
    
   }
 
