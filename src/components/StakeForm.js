@@ -13,13 +13,13 @@ const schema = yup.object().shape({
     amount: yup.number().required()
 })
 
-const StakeForm = ({ setError, setErrMsg }) => {
+const StakeForm = ({ setError, setErrMsg, plan }) => {
     const [approve, setApprove] = useState(false)
     const [amount, setAmount] = useState('')
     const [balance, setBalance] = useState('')
     const [isLoading, setLoading] = useState(false)
     const [Withdraw, setWithdraw] = useState(false)
-    const { account, blockChainData, updateStakedBalance, updateTotalStaked } = useContext(GlobalContext)
+    const { account, blockChainData, updateStakedBalance, updateTotalStaked, web3Provider, fetchAccountData } = useContext(GlobalContext)
 
     const handleApprove = () => {
         schema.isValid({
@@ -30,10 +30,10 @@ const StakeForm = ({ setError, setErrMsg }) => {
                     if (parseFloat(amount) <= parseFloat(blockChainData.TokenBalance)) {
                         try {
                             setLoading(true)
-                            const web3modal = new Web3Modal();
-                            const instance = await web3modal.connect();
-                            const provider = new ethers.providers.Web3Provider(instance);
-                            const signer = provider.getSigner();
+                            // const web3modal = new Web3Modal();
+                            // const instance = await web3modal.connect();
+                            // const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = web3Provider.getSigner();
                             const address = await signer.getAddress();
                             const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
                             const estimateGas = await tokenContract.estimateGas.approve(CONFIG.contractAddress, ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals))
@@ -73,23 +73,22 @@ const StakeForm = ({ setError, setErrMsg }) => {
                     if (parseFloat(amount) <= parseFloat(blockChainData.TokenBalance)) {
                         try {
                             setLoading(true)
-                            const web3modal = new Web3Modal();
-                            const instance = await web3modal.connect();
-                            const provider = new ethers.providers.Web3Provider(instance);
-                            const signer = provider.getSigner();
+                            // const web3modal = new Web3Modal();
+                            // const instance = await web3modal.connect();
+                            // const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = web3Provider.getSigner();
                             const address = await signer.getAddress();
                             const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                            const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals))
+                            const estimateGas = await contract.estimateGas.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals), plan.plan)
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals), tx)
+                            const stakeTx = await contract.createStake(ethers.utils.parseUnits(amount.toString(), CONFIG.tokenDecimals), plan.plan, tx)
                             await stakeTx.wait()
                             setApprove(false)
                             console.log(stakeTx)
-                            updateStakedBalance(parseFloat(blockChainData.StakedBalance) + parseFloat(amount))
-                            updateTotalStaked(parseFloat(blockChainData.TotalStaked) + parseFloat(amount))
+                            fetchAccountData(web3Provider)
                             setLoading(false)
                         } catch (e) {
                             setLoading(false)
@@ -119,23 +118,22 @@ const StakeForm = ({ setError, setErrMsg }) => {
                         try {
                             setLoading(true)
                             setWithdraw(true)
-                            const web3modal = new Web3Modal();
-                            const instance = await web3modal.connect();
-                            const provider = new ethers.providers.Web3Provider(instance);
-                            const signer = provider.getSigner();
+                            // const web3modal = new Web3Modal();
+                            // const instance = await web3modal.connect();
+                            // const provider = new ethers.providers.Web3Provider(instance);
+                            const signer = web3Provider.getSigner();
                             const address = await signer.getAddress();
                             const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                            const estimateGas = await contract.estimateGas.removeStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals))
+                            const estimateGas = await contract.estimateGas.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals))
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const removeStakeTx = await contract.removeStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), tx)
+                            const removeStakeTx = await contract.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), tx)
                             await removeStakeTx.wait()
                             setApprove(false)
                             console.log(removeStakeTx)
-                            updateStakedBalance(parseFloat(blockChainData.StakedBalance) - parseFloat(balance))
-                            updateTotalStaked(parseFloat(blockChainData.TotalStaked) - parseFloat(balance))
+                            fetchAccountData(web3Provider)
                             setLoading(false)
                             setWithdraw(false)
                         } catch (e) {

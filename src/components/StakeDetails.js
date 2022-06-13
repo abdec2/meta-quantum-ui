@@ -2,27 +2,9 @@ import classNames from "classnames"
 import { useContext, useEffect, useState } from "react"
 import { GlobalContext } from "../context/GlobalContext"
 
-const StakeDetails = () => {
+const StakeDetails = ({plan, plans, setPlan}) => {
     const { blockChainData } = useContext(GlobalContext)
-    const plans = [
-        {
-            plan: 1,
-            duration: '6 Months', 
-            apy: blockChainData.sixMonthApy
-        },
-        {
-            plan: 2,
-            duration: '1 Years', 
-            apy: blockChainData.oneYearApy
-        },
-        {
-            plan: 3,
-            duration: '3 Years', 
-            apy: '90'
-        }
-    ]
-
-    const [plan, setPlan] = useState(plans[0])
+    
 
     useEffect(()=>{
         setPlan(plans[0])

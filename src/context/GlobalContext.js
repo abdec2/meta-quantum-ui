@@ -1,8 +1,13 @@
+import { ethers } from "ethers";
 import { createContext, useReducer } from "react";
+import CONFIG from "../abi/config";
 import { AppReducer } from './AppReducer'
+import stakeABI from './../abi/staking.json'
+import tokenABI from './../abi/token.json'
 
 const initialState = {
     account: null,
+    web3Provider: null,
     blockChainData: {
         TokenBalance: null,
         StakedBalance: null,
@@ -69,6 +74,13 @@ export const GlobalProvider = ({ children }) => {
         })
     }
 
+    const updateWeb3Provider = (provider) => {
+        dispatch({
+            type: 'UPDATE_PROVIDER',
+            payload: provider
+        })
+    }
+
     const updateSixMonthApy = (apy) => {
         dispatch({
             type: 'UPDATE_SIX_MONTH_APY',
@@ -90,12 +102,31 @@ export const GlobalProvider = ({ children }) => {
         })
     }
 
+    const fetchAccountData = async (provider) => {
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, signer)
+        const stakeBalance = await contract.stakeOf(address)
+        const rewardBalance = await contract.getDailyRewards()
+        const totalStake = await contract.totalStake()
+        const totalReward = await contract.totalRewards()
+        updateTotalRewards(ethers.utils.formatUnits(totalReward, CONFIG.tokenDecimals))
+        updateTotalStaked(ethers.utils.formatUnits(totalStake, CONFIG.tokenDecimals))
+        updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
+        updateRewardBalance(ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals))
+
+        const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
+        const balanceOf = await tokenContract.balanceOf(address)
+        updateTokenBalance(ethers.utils.formatUnits(balanceOf, CONFIG.tokenDecimals))
+    } 
+
 
     return (
         <GlobalContext.Provider value={
             {
                 ...state,
                 updateAccount,
+                updateWeb3Provider,
                 updateTokenBalance,
                 updateStakedBalance,
                 updateRewardBalance,
@@ -104,7 +135,8 @@ export const GlobalProvider = ({ children }) => {
                 updateTotalStaked,
                 updateSixMonthApy,
                 updateOneYearApy,
-                updateThreeYearApy
+                updateThreeYearApy,
+                fetchAccountData
             }
         }
         >

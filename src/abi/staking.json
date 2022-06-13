@@ -32,41 +32,14 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_stakeholder",
-        "type": "address"
-      }
-    ],
-    "name": "addStakeholder",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_stakeholder",
-        "type": "address"
-      }
-    ],
-    "name": "calculateReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "_stake",
         "type": "uint256"
+      },
+      {
+        "internalType": "enum Staking.StakingPeriod",
+        "name": "_stakePeriod",
+        "type": "uint8"
       }
     ],
     "name": "createStake",
@@ -76,53 +49,7 @@
   },
   {
     "inputs": [],
-    "name": "distributeRewards",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getOneYearAPR",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getSixMonthAPR",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getThreeYearAPR",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getTotalRewards",
+    "name": "getDailyRewards",
     "outputs": [
       {
         "internalType": "uint256",
@@ -134,20 +61,9 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      }
-    ],
-    "name": "isStakeholder",
+    "inputs": [],
+    "name": "getTotalRewards",
     "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      },
       {
         "internalType": "uint256",
         "name": "",
@@ -197,55 +113,10 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_stake",
-        "type": "uint256"
-      }
-    ],
-    "name": "removeStake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_stakeholder",
-        "type": "address"
-      }
-    ],
-    "name": "removeStakeholder",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_stakeholder",
-        "type": "address"
-      }
-    ],
-    "name": "rewardOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -320,6 +191,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakeholder",
+        "type": "address"
+      }
+    ],
+    "name": "stakingPeriodOf",
+    "outputs": [
+      {
+        "internalType": "enum Staking.StakingPeriod",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "threeYearAPR",
     "outputs": [
@@ -372,8 +262,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "withdrawReward",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_stake",
+        "type": "uint256"
+      }
+    ],
+    "name": "unStake",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -11,39 +11,57 @@ import Web3Modal from "web3modal";
 const Main = ({ setError, setErrMsg }) => {
     const { blockChainData, account, updateRewardBalance } = useContext(GlobalContext)
     const [isLoading, setLoading] = useState(false)
-
-    const handleRewardsWithdraw = async () => {
-        if (account) {
-            if (parseFloat(blockChainData.RewardBalance) > 0) {
-                try {
-                    setLoading(true)
-                    const web3modal = new Web3Modal();
-                    const instance = await web3modal.connect();
-                    const provider = new ethers.providers.Web3Provider(instance);
-                    const signer = provider.getSigner();
-                    const address = await signer.getAddress();
-                    const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                    const estimateGas = await contract.estimateGas.withdrawReward()
-                    console.log(estimateGas.toString())
-                    const tx = {
-                        gasLimit: estimateGas.toString()
-                    }
-                    const withdrawRewardTx = await contract.withdrawReward()
-                    await withdrawRewardTx.wait()
-                    console.log(withdrawRewardTx)
-                    updateRewardBalance(null);
-                    setLoading(false)
-                } catch (e) {
-                    setLoading(false)
-                    setError(true)
-                    setErrMsg('Something went wrong')
-                }
-            } else {
-                setError(true)
-                setErrMsg('Your Rewards balance is 0')
-            }
+    const plans = [
+        {
+            plan: 0,
+            duration: '6 Months', 
+            apy: blockChainData.sixMonthApy
+        },
+        {
+            plan: 1,
+            duration: '1 Years', 
+            apy: blockChainData.oneYearApy
+        },
+        {
+            plan: 2,
+            duration: '3 Years', 
+            apy: blockChainData.threeYearApy
         }
-    }
+    ]
+    const [plan, setPlan] = useState(plans[0])
+
+    // const handleRewardsWithdraw = async () => {
+    //     if (account) {
+    //         if (parseFloat(blockChainData.RewardBalance) > 0) {
+    //             try {
+    //                 setLoading(true)
+    //                 const web3modal = new Web3Modal();
+    //                 const instance = await web3modal.connect();
+    //                 const provider = new ethers.providers.Web3Provider(instance);
+    //                 const signer = provider.getSigner();
+    //                 const address = await signer.getAddress();
+    //                 const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
+    //                 const estimateGas = await contract.estimateGas.withdrawReward()
+    //                 console.log(estimateGas.toString())
+    //                 const tx = {
+    //                     gasLimit: estimateGas.toString()
+    //                 }
+    //                 const withdrawRewardTx = await contract.withdrawReward()
+    //                 await withdrawRewardTx.wait()
+    //                 console.log(withdrawRewardTx)
+    //                 updateRewardBalance(null);
+    //                 setLoading(false)
+    //             } catch (e) {
+    //                 setLoading(false)
+    //                 setError(true)
+    //                 setErrMsg('Something went wrong')
+    //             }
+    //         } else {
+    //             setError(true)
+    //             setErrMsg('Your Rewards balance is 0')
+    //         }
+    //     }
+    // }
 
     return (
         <div className="container mx-auto md:max-w-5xl px-12 text-[color:var(--font-color)] mt-14 font-Poppins">
@@ -52,11 +70,11 @@ const Main = ({ setError, setErrMsg }) => {
                     <h3 className="uppercase font-semibold text-md font-Poppins text-left">Meta Quantum Rewards Earned</h3>
                     <div className="flex items-center justify-between">
                         <h2 className="font-extrabold text-2xl ml-3 text-left">{(blockChainData.RewardBalance) ? blockChainData.RewardBalance : '0.00'} {CONFIG.tokenSymbol}</h2>
-                        {(isLoading) ? (
+                        {/* {(isLoading) ? (
                             <LoadingSpinner />
                         ) : (
                             <button className="bg-purple-900 text-white uppercase px-6 py-2 ml-4 text-sm hover:text-purple-300 border border-white rounded-full" onClick={handleRewardsWithdraw}>Withdraw</button>
-                        )}
+                        )} */}
 
                     </div>
                 </div>
@@ -69,8 +87,8 @@ const Main = ({ setError, setErrMsg }) => {
                         <div className="font-Poppins mt-6 px-3 border-b-2 border-[color:var(--border-color)]">
                             <p className="font-normal text-left">Total Stake</p>
                         </div>
-                        <StakeDetails />
-                        <StakeForm setError={setError} setErrMsg={setErrMsg} />
+                        <StakeDetails plan={plan} plans={plans} setPlan={setPlan} />
+                        <StakeForm setError={setError} setErrMsg={setErrMsg} plan={plan} />
                     </div>
                 </div>
                 <div className="stakeInfo md:pl-20 w-full md:w-1/2 mb-8 z-10">

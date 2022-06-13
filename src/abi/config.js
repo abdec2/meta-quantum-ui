@@ -1,11 +1,11 @@
 
 const CONFIG = {
-    chainId: 1,
-    contractAddress: "0x7Ddc85ba5436F6dBd57fF958eeaba091ba432c97", 
-    tokenAddress: "0x198C654590F6f864a0054E2A213224fc9CC775De", 
+    chainId: 4,
+    contractAddress: "0x5653AE1A55E6f1858c3859D3254DBC390CA8fA8E", 
+    tokenAddress: "0xfd259e4FB9C6722e76FEdc7D38EBB6C31f14b9F7", 
     tokenDecimals: '18',
     tokenSymbol: 'QTH', 
-    networkName: 'Ethereum Mainnet'
+    networkName: 'Rinkeby'
 }
 
 export default CONFIG;

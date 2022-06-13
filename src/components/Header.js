@@ -20,23 +20,23 @@ const providerOptions = {
 };
 
 const Header = ({setError, setErrMsg}) => {
-  const { account, updateAccount, updateStakedBalance, updateRewardBalance, updateTokenBalance } = useContext(GlobalContext);
+  const { account, updateAccount, updateStakedBalance, updateRewardBalance, updateTokenBalance, updateWeb3Provider, fetchAccountData } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false)
 
-  const getTokenBalance = async (signer, address) => {
-    const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
-    const balanceOf = await tokenContract.balanceOf(address)
-    updateTokenBalance(ethers.utils.formatUnits(balanceOf, CONFIG.tokenDecimals))
-  }
+  // const getTokenBalance = async (signer, address) => {
+  //   const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
+  //   const balanceOf = await tokenContract.balanceOf(address)
+  //   updateTokenBalance(ethers.utils.formatUnits(balanceOf, CONFIG.tokenDecimals))
+  // }
   
-  const loadAccountData = async (signer, address) => {
-    const contract = new ethers.Contract(CONFIG.contractAddress, StakeABI, signer)
-    const stakeBalance = await contract.stakeOf(address)
-    const rewardBalance = await contract.rewardOf(address)
-    updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
-    updateRewardBalance(ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals))
-    getTokenBalance(signer, address)
-  }
+  // const loadAccountData = async (signer, address) => {
+  //   const contract = new ethers.Contract(CONFIG.contractAddress, StakeABI, signer)
+  //   const stakeBalance = await contract.stakeOf(address)
+  //   const rewardBalance = await contract.getDailyRewards()
+  //   updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
+  //   updateRewardBalance(ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals))
+  //   getTokenBalance(signer, address)
+  // }
 
   const handleWalletConnect = async () => {
 
@@ -45,6 +45,7 @@ const Header = ({setError, setErrMsg}) => {
     });
     const instance = await web3modal.connect();
     const provider = new ethers.providers.Web3Provider(instance);
+    updateWeb3Provider(provider);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     updateAccount(address);
@@ -56,7 +57,8 @@ const Header = ({setError, setErrMsg}) => {
     } else {
         setError(false) 
         setErrMsg('')
-        loadAccountData(signer, address)
+        fetchAccountData(provider)
+        // loadAccountData(signer, address)
     }
   };
 
@@ -64,6 +66,7 @@ const Header = ({setError, setErrMsg}) => {
     updateAccount(null)
     updateStakedBalance(null)
     updateTokenBalance(null)
+    updateWeb3Provider(null)
   }
 
   useEffect(() => {
@@ -79,7 +82,7 @@ const Header = ({setError, setErrMsg}) => {
 
   return (
     <div className="container mx-auto md:max-w-5xl px-12 font-Poppins">
-      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} account={account} setError={setError} setErrMsg={setErrMsg} loadAccountData={loadAccountData} />
+      <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} account={account} setError={setError} setErrMsg={setErrMsg} loadAccountData={fetchAccountData} />
       <div className="header flex items-center justify-between space-x-20 min-h-[8rem]">
         <div className="w-20 truncate">
           <img
