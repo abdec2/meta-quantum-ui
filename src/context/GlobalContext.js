@@ -12,6 +12,8 @@ const initialState = {
         TokenBalance: null,
         StakedBalance: null,
         RewardBalance: null,
+        RewardBalance1: null,
+        RewardBalance2: null,
         TokenPrice:null,
         TotalRewards:null,
         TotalStaked:null, 
@@ -108,12 +110,18 @@ export const GlobalProvider = ({ children }) => {
         const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, signer)
         const stakeBalance = await contract.stakeOf(address, 0)
         const rewardBalance = await contract.getDailyRewards(0)
+        const rewardBalance1 = await contract.getDailyRewards(1)
+        const RewardBalance2 = await contract.getDailyRewards(2)
         const totalStake = await contract.totalStake()
         const totalReward = await contract.totalRewards()
         updateTotalRewards(ethers.utils.formatUnits(totalReward, CONFIG.tokenDecimals))
         updateTotalStaked(ethers.utils.formatUnits(totalStake, CONFIG.tokenDecimals))
         updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
-        updateRewardBalance(ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals))
+        updateRewardBalance({
+            rewards: ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals),
+            rewards1: ethers.utils.formatUnits(rewardBalance1, CONFIG.tokenDecimals),
+            rewards2: ethers.utils.formatUnits(RewardBalance2, CONFIG.tokenDecimals)
+        })
 
         const tokenContract = new ethers.Contract(CONFIG.tokenAddress, tokenABI, signer)
         const balanceOf = await tokenContract.balanceOf(address)

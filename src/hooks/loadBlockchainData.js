@@ -3,7 +3,6 @@ import { useContext, useEffect } from "react"
 import CONFIG from "../abi/config";
 import { GlobalContext } from "../context/GlobalContext"
 import stakeABI from '../abi/staking.json'
-import tokenABI from './../abi/token.json'
 
 export const useBlockChainData = () => {
     const { updateTotalRewards, updateTotalStaked, updateSixMonthApy, updateOneYearApy, updateThreeYearApy } = useContext(GlobalContext)

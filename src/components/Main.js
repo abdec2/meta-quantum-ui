@@ -30,48 +30,15 @@ const Main = ({ setError, setErrMsg }) => {
     ]
     const [plan, setPlan] = useState(plans[0])
 
-    // const handleRewardsWithdraw = async () => {
-    //     if (account) {
-    //         if (parseFloat(blockChainData.RewardBalance) > 0) {
-    //             try {
-    //                 setLoading(true)
-    //                 const web3modal = new Web3Modal();
-    //                 const instance = await web3modal.connect();
-    //                 const provider = new ethers.providers.Web3Provider(instance);
-    //                 const signer = provider.getSigner();
-    //                 const address = await signer.getAddress();
-    //                 const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-    //                 const estimateGas = await contract.estimateGas.withdrawReward()
-    //                 console.log(estimateGas.toString())
-    //                 const tx = {
-    //                     gasLimit: estimateGas.toString()
-    //                 }
-    //                 const withdrawRewardTx = await contract.withdrawReward()
-    //                 await withdrawRewardTx.wait()
-    //                 console.log(withdrawRewardTx)
-    //                 updateRewardBalance(null);
-    //                 setLoading(false)
-    //             } catch (e) {
-    //                 setLoading(false)
-    //                 setError(true)
-    //                 setErrMsg('Something went wrong')
-    //             }
-    //         } else {
-    //             setError(true)
-    //             setErrMsg('Your Rewards balance is 0')
-    //         }
-    //     }
-    // }
-
     return (
         <div className="container mx-auto md:max-w-5xl px-12 text-[color:var(--font-color)] mt-14 font-Poppins">
             {account && (
                 <div className="stakePanel bg-[color:var(--cards-bg)] p-6 w-full mb-3">
                     <h3 className="uppercase font-semibold text-md font-Poppins text-left">Meta Quantum Rewards Earned</h3>
                     <div className="flex flex-col md:flex-row items-center justify-between">
-                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">6 Months: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
-                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">1 Year: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
-                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">3 Years: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        <h2 className="text-lg ml-3 mt-3 text-left">6 Months: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        <h2 className="text-lg ml-3 mt-3 text-left">1 Year: {(blockChainData.RewardBalance1) ? parseFloat(blockChainData.RewardBalance1).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        <h2 className="text-lg ml-3 mt-3 text-left">3 Years: {(blockChainData.RewardBalance2) ? parseFloat(blockChainData.RewardBalance2).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
                     </div>
                 </div>
             )}

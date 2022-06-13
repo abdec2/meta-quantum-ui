@@ -23,7 +23,9 @@ export const AppReducer = (state, action) => {
                 ...state,
                 blockChainData: {
                     ...state.blockChainData,
-                    RewardBalance: action.payload
+                    RewardBalance: action.payload.rewards,
+                    RewardBalance1: action.payload.rewards1,
+                    RewardBalance2: action.payload.rewards2
                 }
             }
 

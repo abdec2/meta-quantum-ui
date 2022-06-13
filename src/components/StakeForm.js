@@ -6,7 +6,6 @@ import { GlobalContext } from '../context/GlobalContext'
 import tokenABI from './../abi/token.json'
 import contractABI from './../abi/staking.json'
 import { ethers } from "ethers";
-import Web3Modal from "web3modal";
 import LoadingSpinner from './LoadingSpinner'
 
 const schema = yup.object().shape({
@@ -19,7 +18,7 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
     const [balance, setBalance] = useState('')
     const [isLoading, setLoading] = useState(false)
     const [Withdraw, setWithdraw] = useState(false)
-    const { account, blockChainData, updateStakedBalance, updateTotalStaked, web3Provider, fetchAccountData } = useContext(GlobalContext)
+    const { account, blockChainData, web3Provider, fetchAccountData } = useContext(GlobalContext)
 
     const handleApprove = () => {
         schema.isValid({
@@ -124,12 +123,12 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
                             const signer = web3Provider.getSigner();
                             const address = await signer.getAddress();
                             const contract = new ethers.Contract(CONFIG.contractAddress, contractABI, signer)
-                            const estimateGas = await contract.estimateGas.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals))
+                            const estimateGas = await contract.estimateGas.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), plan.plan)
                             console.log(estimateGas.toString())
                             const tx = {
                                 gasLimit: estimateGas.toString()
                             }
-                            const removeStakeTx = await contract.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), tx)
+                            const removeStakeTx = await contract.unStake(ethers.utils.parseUnits(balance.toString(), CONFIG.tokenDecimals), plan.plan, tx)
                             await removeStakeTx.wait()
                             setApprove(false)
                             console.log(removeStakeTx)
