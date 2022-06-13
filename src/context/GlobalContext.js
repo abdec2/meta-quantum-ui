@@ -106,8 +106,8 @@ export const GlobalProvider = ({ children }) => {
         const signer = provider.getSigner();
         const address = await signer.getAddress();
         const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, signer)
-        const stakeBalance = await contract.stakeOf(address)
-        const rewardBalance = await contract.getDailyRewards()
+        const stakeBalance = await contract.stakeOf(address, 0)
+        const rewardBalance = await contract.getDailyRewards(0)
         const totalStake = await contract.totalStake()
         const totalReward = await contract.totalRewards()
         updateTotalRewards(ethers.utils.formatUnits(totalReward, CONFIG.tokenDecimals))

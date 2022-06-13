@@ -68,14 +68,10 @@ const Main = ({ setError, setErrMsg }) => {
             {account && (
                 <div className="stakePanel bg-[color:var(--cards-bg)] p-6 w-full mb-3">
                     <h3 className="uppercase font-semibold text-md font-Poppins text-left">Meta Quantum Rewards Earned</h3>
-                    <div className="flex items-center justify-between">
-                        <h2 className="font-extrabold text-2xl ml-3 text-left">{(blockChainData.RewardBalance) ? blockChainData.RewardBalance : '0.00'} {CONFIG.tokenSymbol}</h2>
-                        {/* {(isLoading) ? (
-                            <LoadingSpinner />
-                        ) : (
-                            <button className="bg-purple-900 text-white uppercase px-6 py-2 ml-4 text-sm hover:text-purple-300 border border-white rounded-full" onClick={handleRewardsWithdraw}>Withdraw</button>
-                        )} */}
-
+                    <div className="flex flex-col md:flex-row items-center justify-between">
+                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">6 Months: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">1 Year: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
+                        <h2 className="font-bold text-xl ml-3 mt-3 text-left">3 Years: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
                     </div>
                 </div>
             )}

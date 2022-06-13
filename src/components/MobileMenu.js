@@ -20,7 +20,7 @@ const providerOptions = {
 
 
 const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData }) => {
-  const { account, updateAccount, updateStakedBalance, updateTokenBalance } = useContext(GlobalContext);
+  const { account, updateAccount, updateStakedBalance, updateTokenBalance, updateWeb3Provider } = useContext(GlobalContext);
 
 
   const handleWalletConnect = async () => {
@@ -29,6 +29,7 @@ const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData })
     });
     const instance = await web3modal.connect();
     const provider = new ethers.providers.Web3Provider(instance);
+    updateWeb3Provider(provider);
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     updateAccount(address);
@@ -40,7 +41,7 @@ const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData })
     } else {
         setError(false) 
         setErrMsg('')
-        loadAccountData(signer, address)
+        loadAccountData(provider)
     }
   };
 
@@ -48,6 +49,7 @@ const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData })
     updateAccount(null)
     updateStakedBalance(null)
     updateTokenBalance(null)
+    updateWeb3Provider(null)
   }
 
   useEffect(() => {
