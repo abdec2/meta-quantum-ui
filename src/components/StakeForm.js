@@ -155,7 +155,7 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
     }
 
     return (
-        <div className="ml-8 mt-2 mb-4">
+        <div className=" mt-2 mb-4">
             <div>
                 <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left ">Balance: {(blockChainData.TokenBalance) ? blockChainData.TokenBalance : '0.0'} {CONFIG.tokenSymbol}</p>
                 <div className="w-full flex items-center justify-between">
@@ -168,9 +168,9 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
                         <LoadingSpinner />
                     ) : (
                         <>
-                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
+                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400 min-w-[125px]', { 'hidden': approve })} onClick={handleApprove}>Approve</button>
 
-                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
+                            <button className={classNames('bg-purple-900 text-white rounded-full border border-white uppercase px-4 py-2 ml-4 text-sm font-bold hover:text-purple-400 min-w-[125px]', { 'hidden': !approve })} onClick={handleStake}>Stake</button>
                         </>
                     )}
 
@@ -179,7 +179,7 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
             </div>
             <div className="mt-2">
 
-                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left">Stake Balance: {(blockChainData.StakedBalance) ? blockChainData.StakedBalance : '0.0'} {CONFIG.tokenSymbol}</p>
+                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left">Stake Balance: {(plan.plan == 0) ? blockChainData.StakedBalance : (plan.plan == 1) ? blockChainData.StakedBalance1 : (plan.plan == 2) ? blockChainData.StakedBalance2 : '0.00'} {CONFIG.tokenSymbol}</p>
 
                 <div className="w-full flex items-center justify-between">
                     <div className='w-3/4 relative'>
@@ -190,7 +190,7 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
                     {(isLoading && Withdraw) ? (
                         <LoadingSpinner />
                     ) : (
-                        <button className="bg-purple-900 uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm font-semibold hover:text-purple-400 rounded-full border border-white" onClick={handleWithdraw}>Withdraw</button>
+                        <button className="bg-purple-900 font-bold uppercase text-[color:var(--font-color)] px-4 py-2 ml-4 text-sm hover:text-purple-400 rounded-full border border-white min-w-[125px]" onClick={handleWithdraw}>Withdraw</button>
                     )}
                 </div>
 

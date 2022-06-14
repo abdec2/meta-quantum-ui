@@ -13,9 +13,9 @@ const StakeDetails = ({plan, plans, setPlan}) => {
     return (
         <>
             <div className="p-6 flex items-center justify-center space-x-2 md:space-x-8">
-                <button className={classNames('uppercase bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'text-purple-400': plan.plan === 1})} onClick={()=> setPlan(plans[0])}>6 Months</button>
-                <button className={classNames('uppercase bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'text-purple-400': plan.plan === 2})} onClick={()=> setPlan(plans[1])}>1 Years</button>
-                <button className={classNames('uppercase bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'text-purple-400': plan.plan === 3})} onClick={()=> setPlan(plans[2])}>3 Years</button>
+                <button className={classNames('uppercase min-w-[90px] bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'border-4 font-bold': plan.plan === 0})} onClick={()=> setPlan(plans[0])}>6 Months</button>
+                <button className={classNames('uppercase min-w-[90px] bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'border-4 font-bold': plan.plan === 1})} onClick={()=> setPlan(plans[1])}>1 Years</button>
+                <button className={classNames('uppercase min-w-[90px] bg-purple-900 rounded-full truncate text-sm px-2 py-1 border border-white hover:text-purple-400', {'border-4 font-bold': plan.plan === 2})} onClick={()=> setPlan(plans[2])}>3 Years</button>
             </div>
             <div className="mt-4 flex items-start justify-between">
                 <div className="space-y-4 text-sm mr-4">

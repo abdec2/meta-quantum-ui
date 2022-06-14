@@ -11,6 +11,8 @@ const initialState = {
     blockChainData: {
         TokenBalance: null,
         StakedBalance: null,
+        StakedBalance1: null,
+        StakedBalance2: null,
         RewardBalance: null,
         RewardBalance1: null,
         RewardBalance2: null,
@@ -109,6 +111,8 @@ export const GlobalProvider = ({ children }) => {
         const address = await signer.getAddress();
         const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, signer)
         const stakeBalance = await contract.stakeOf(address, 0)
+        const stakeBalance1 = await contract.stakeOf(address, 1)
+        const stakeBalance2 = await contract.stakeOf(address, 2)
         const rewardBalance = await contract.getDailyRewards(0)
         const rewardBalance1 = await contract.getDailyRewards(1)
         const RewardBalance2 = await contract.getDailyRewards(2)
@@ -116,7 +120,11 @@ export const GlobalProvider = ({ children }) => {
         const totalReward = await contract.totalRewards()
         updateTotalRewards(ethers.utils.formatUnits(totalReward, CONFIG.tokenDecimals))
         updateTotalStaked(ethers.utils.formatUnits(totalStake, CONFIG.tokenDecimals))
-        updateStakedBalance(ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals))
+        updateStakedBalance({
+            stake_Balance: ethers.utils.formatUnits(stakeBalance, CONFIG.tokenDecimals),
+            stake_Balance1: ethers.utils.formatUnits(stakeBalance1, CONFIG.tokenDecimals),
+            stake_Balance2: ethers.utils.formatUnits(stakeBalance2, CONFIG.tokenDecimals)
+        })
         updateRewardBalance({
             rewards: ethers.utils.formatUnits(rewardBalance, CONFIG.tokenDecimals),
             rewards1: ethers.utils.formatUnits(rewardBalance1, CONFIG.tokenDecimals),

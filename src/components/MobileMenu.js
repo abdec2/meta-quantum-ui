@@ -47,7 +47,11 @@ const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData })
 
   const disconnectWallet = () => {
     updateAccount(null)
-    updateStakedBalance(null)
+    updateStakedBalance({
+      stake_Balance: null,
+      stake_Balance1: null,
+      stake_Balance2: null
+  })
     updateTokenBalance(null)
     updateWeb3Provider(null)
   }

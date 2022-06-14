@@ -14,7 +14,9 @@ export const AppReducer = (state, action) => {
                 ...state,
                 blockChainData: {
                     ...state.blockChainData,
-                    StakedBalance: action.payload
+                    StakedBalance: action.payload.stake_Balance,
+                    StakedBalance1: action.payload.stake_Balance1,
+                    StakedBalance2: action.payload.stake_Balance2
                 }
             }
 

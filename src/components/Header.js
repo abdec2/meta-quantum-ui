@@ -20,7 +20,7 @@ const providerOptions = {
 };
 
 const Header = ({setError, setErrMsg}) => {
-  const { account, updateAccount, updateStakedBalance, updateRewardBalance, updateTokenBalance, updateWeb3Provider, fetchAccountData } = useContext(GlobalContext);
+  const { account, web3Provider, updateAccount, updateStakedBalance, updateRewardBalance, updateTokenBalance, updateWeb3Provider, fetchAccountData } = useContext(GlobalContext);
   const [isOpen, setIsOpen] = useState(false)
 
   // const getTokenBalance = async (signer, address) => {
@@ -64,7 +64,11 @@ const Header = ({setError, setErrMsg}) => {
 
   const disconnectWallet = () => {
     updateAccount(null)
-    updateStakedBalance(null)
+    updateStakedBalance({
+      stake_Balance: null,
+      stake_Balance1: null,
+      stake_Balance2: null
+  })
     updateTokenBalance(null)
     updateWeb3Provider(null)
   }
@@ -73,6 +77,7 @@ const Header = ({setError, setErrMsg}) => {
     if(window.ethereum) {
       window.ethereum.on('accountsChanged', accounts => {
           updateAccount(accounts[0])
+          fetchAccountData(web3Provider)
       })
       window.ethereum.on('chainChanged', chainId => {
           window.location.reload();
