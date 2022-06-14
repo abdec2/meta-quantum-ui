@@ -113,7 +113,8 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
         }).then(async value => {
             if (value) {
                 if (account) {
-                    if (parseFloat(balance) <= parseFloat(blockChainData.StakedBalance)) {
+                    const _staking_Balance = (plan.plan == 0) ? blockChainData.StakedBalance : (plan.plan == 1) ? blockChainData.StakedBalance1 : (plan.plan == 2) ? blockChainData.StakedBalance2 : 0
+                    if (parseFloat(balance) <= parseFloat(_staking_Balance)) {
                         try {
                             setLoading(true)
                             setWithdraw(true)
@@ -157,7 +158,7 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
     return (
         <div className=" mt-2 mb-4">
             <div>
-                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left ">Balance: {(blockChainData.TokenBalance) ? blockChainData.TokenBalance : '0.0'} {CONFIG.tokenSymbol}</p>
+                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left ">Balance: {(blockChainData.TokenBalance) ? parseFloat(blockChainData.TokenBalance).toFixed(2) : '0.0'} {CONFIG.tokenSymbol}</p>
                 <div className="w-full flex items-center justify-between">
                     <div className='w-3/4 relative'>
                         <input type="text" name="amount" className="w-full bg-transparent border-2 border-[color:var(--border-color)] text-md focus:outline-none px-2 py-1" value={amount} onChange={e => setAmount(e.target.value)} />
@@ -179,12 +180,12 @@ const StakeForm = ({ setError, setErrMsg, plan }) => {
             </div>
             <div className="mt-2">
 
-                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left">Stake Balance: {(plan.plan == 0) ? blockChainData.StakedBalance : (plan.plan == 1) ? blockChainData.StakedBalance1 : (plan.plan == 2) ? blockChainData.StakedBalance2 : '0.00'} {CONFIG.tokenSymbol}</p>
+                <p className="text-xs font-bold uppercase text-[color:var(--font-color)] text-left">Stake Balance: {(plan.plan == 0) ? parseFloat(blockChainData.StakedBalance).toFixed(2) : (plan.plan == 1) ? parseFloat(blockChainData.StakedBalance1).toFixed(2) : (plan.plan == 2) ? parseFloat(blockChainData.StakedBalance2).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</p>
 
                 <div className="w-full flex items-center justify-between">
                     <div className='w-3/4 relative'>
                         <input type="text" name="amount" className="w-full bg-transparent border-2 border-[color:var(--border-color)] text-md focus:outline-none px-2 py-1 " value={balance} onChange={e => setBalance(e.target.value)} />
-                        <span className='absolute top-0 right-0 mr-3 mt-1 cursor-pointer hover:text-yellow-500' onClick={() => setBalance(blockChainData.StakedBalance)}>Max</span>
+                        <span className='absolute top-0 right-0 mr-3 mt-1 cursor-pointer hover:text-yellow-500' onClick={() => setBalance((plan.plan == 0) ? blockChainData.StakedBalance : (plan.plan == 1) ? blockChainData.StakedBalance1 : (plan.plan == 2) ? blockChainData.StakedBalance2 : 0)}>Max</span>
                     </div>
 
                     {(isLoading && Withdraw) ? (

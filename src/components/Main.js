@@ -74,7 +74,7 @@ const Main = ({ setError, setErrMsg }) => {
                         </div>
                         <div className="flex min-h-[8rem] bg-[color:var(--cards-bg)] w-full p-8 items-start text-left justify-between">
                             <div>
-                                <h2 className="font-extrabold text-2xl">{(blockChainData.TotalRewards) ? blockChainData.TotalRewards : '0.00'}</h2>
+                                <h2 className="font-extrabold text-2xl">{(blockChainData.TotalRewards) ? parseFloat(blockChainData.TotalRewards).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
                                 <p className="uppercase text-sm font-light">Total Claimed Rewards</p>
                             </div>
                             <div>
@@ -99,7 +99,7 @@ const Main = ({ setError, setErrMsg }) => {
                         </div>
                         <div className="flex min-h-[8rem] bg-[color:var(--cards-bg)] w-full p-8 items-start text-left justify-between">
                             <div>
-                                <h2 className="font-extrabold text-2xl">{(blockChainData.TotalStaked) ? blockChainData.TotalStaked : '0.00'} {CONFIG.tokenSymbol}</h2>
+                                <h2 className="font-extrabold text-2xl">{(blockChainData.TotalStaked) ? parseFloat(blockChainData.TotalStaked).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</h2>
                                 <p className="uppercase text-sm font-light">Total Staked</p>
                             </div>
                             <div>
@@ -133,17 +133,17 @@ const Main = ({ setError, setErrMsg }) => {
                         <div className="bg-slate-200 bg-opacity-5 px-6 py-4 w-full rounded-lg mb-6 md:mb-0">
                             <h2 className="text-xl text-center font-bold mb-4 uppercase border-b pb-2 border-white border-opacity-20">6 Months</h2>
                             <p className="text-sm">Rewards Earned: {(blockChainData.RewardBalance) ? parseFloat(blockChainData.RewardBalance).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</p>
-                            <p className="text-sm">Stake Amount: {blockChainData.StakedBalance} {CONFIG.tokenSymbol}</p>
+                            <p className="text-sm">Stake Amount: {parseFloat(blockChainData.StakedBalance).toFixed(2)} {CONFIG.tokenSymbol}</p>
                         </div>
                         <div className="bg-slate-200 bg-opacity-5 px-6 py-4 w-full rounded-lg mb-6 md:mb-0">
                             <h2 className="text-xl text-center font-bold mb-4 uppercase border-b pb-2 border-white border-opacity-20">1 Year</h2>
                             <p className="text-sm">Rewards Earned: {(blockChainData.RewardBalance1) ? parseFloat(blockChainData.RewardBalance1).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</p>
-                            <p className="text-sm">Stake Amount: {blockChainData.StakedBalance1} {CONFIG.tokenSymbol}</p>
+                            <p className="text-sm">Stake Amount: {parseFloat(blockChainData.StakedBalance1).toFixed(2)} {CONFIG.tokenSymbol}</p>
                         </div>
                         <div className="bg-slate-200 bg-opacity-5 px-6 py-4 w-full rounded-lg mb-6 md:mb-0">
                             <h2 className="text-xl text-center font-bold mb-4 uppercase border-b pb-2 border-white border-opacity-20">3 Years</h2>
                             <p className="text-sm">Rewards Earned: {(blockChainData.RewardBalance2) ? parseFloat(blockChainData.RewardBalance2).toFixed(2) : '0.00'} {CONFIG.tokenSymbol}</p>
-                            <p className="text-sm">Stake Amount: {blockChainData.StakedBalance2} {CONFIG.tokenSymbol}</p>
+                            <p className="text-sm">Stake Amount: {parseFloat(blockChainData.StakedBalance2).toFixed(2)} {CONFIG.tokenSymbol}</p>
                         </div>
                     </div>
                 </div>
