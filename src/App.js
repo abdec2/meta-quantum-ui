@@ -11,11 +11,13 @@ import stakeABI from './abi/staking.json'
 import { GlobalContext } from './context/GlobalContext'
 import LoadingSpinner from './components/LoadingSpinner';
 import { useBlockChainData } from './hooks/loadBlockchainData';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
   const [error, setError] = useState(false);
   const [errMsg, setErrMsg] = useState('');
-  useBlockChainData()
+  const [dataLoading, setDataLoading] = useState(false)
+  useBlockChainData(setDataLoading)
   // const {updateTotalRewards, updateTotalStaked, updateSixMonthApy, updateOneYearApy, updateThreeYearApy} = useContext(GlobalContext)
 
   // const loadBlockChain = async () => {
@@ -41,7 +43,7 @@ function App() {
 
   return (
       <div className="App bg-grad min-h-screen text-white">
-        {/* <LoadingSpinner /> */}
+        <LoadingScreen dataLoading={dataLoading} />
         <Header setError={setError} setErrMsg={setErrMsg} />
         <Main setError={setError} setErrMsg={setErrMsg} />
         {error && (<AlertBox msg={errMsg} setError={setError} setErrMsg={setErrMsg} />)}

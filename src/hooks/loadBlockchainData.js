@@ -4,11 +4,12 @@ import CONFIG from "../abi/config";
 import { GlobalContext } from "../context/GlobalContext"
 import stakeABI from '../abi/staking.json'
 
-export const useBlockChainData = () => {
+export const useBlockChainData = (setDataLoading) => {
     const { updateTotalRewards, updateTotalStaked, updateSixMonthApy, updateOneYearApy, updateThreeYearApy } = useContext(GlobalContext)
 
     const loadData = async () => {
-        const provider = ethers.getDefaultProvider('rinkeby', {
+        setDataLoading(true)
+        const provider = ethers.getDefaultProvider('mainnet', {
             infura: process.env.REACT_APP_INFURA_PROJECT_ID
         });
         const contract = new ethers.Contract(CONFIG.contractAddress, stakeABI, provider)
@@ -22,6 +23,7 @@ export const useBlockChainData = () => {
         updateSixMonthApy(six_month_apy)
         updateOneYearApy(one_year_apy)
         updateThreeYearApy(three_year_apy)
+        setDataLoading(false)
     }
     useEffect(() => {
         loadData()

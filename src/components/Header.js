@@ -9,7 +9,7 @@ import MobileMenu from "./MobileMenu";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const providerOptions = {
-  network: 'rinkeby',
+  network: 'mainnet',
   cacheProvider: false,
   walletconnect: {
     package: WalletConnectProvider, // required
