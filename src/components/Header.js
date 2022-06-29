@@ -7,6 +7,7 @@ import tokenABI from './../abi/token.json'
 import CONFIG from "./../abi/config";
 import MobileMenu from "./MobileMenu";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import logo from './../assets/logo.png'
 
 const providerOptions = {
   network: 'mainnet',
@@ -91,7 +92,7 @@ const Header = ({setError, setErrMsg}) => {
       <div className="header flex items-center justify-between space-x-20 min-h-[8rem]">
         <div className="w-20 truncate">
           <img
-            src="https://cdn.meta-quantum.io/website/assets/svg/logo.svg"
+            src={logo}
             alt="meta quantum"
           />
         </div>

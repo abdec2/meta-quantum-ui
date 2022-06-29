@@ -5,6 +5,7 @@ import { GlobalContext } from "./../context/GlobalContext";
 import { useContext, useEffect } from "react";
 import { ethers } from "ethers";
 import CONFIG from "./../abi/config";
+import logo from './../assets/logo.png'
 
 const providerOptions = {
   network: 'rinkeby',
@@ -74,7 +75,7 @@ const MobileMenu = ({ isOpen, setIsOpen, setError, setErrMsg, loadAccountData })
       <div className="w-full p-8 flex items-center justify-between" >
         <div className="w-20 truncate">
           <img
-            src="https://cdn.meta-quantum.io/website/assets/svg/logo.svg"
+            src={logo}
             alt="meta quantum"
           />
         </div>
